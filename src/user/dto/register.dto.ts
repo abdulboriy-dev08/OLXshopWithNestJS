@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-enum userRole {
+export enum userRole {
   ADMIN = 'ADMIN',
   SUPER_ADMIN = 'SUPER_ADMIN',
   USER = 'USER',
@@ -28,9 +28,9 @@ export class RegisterDto {
     default: userRole.USER,
     example: userRole.ADMIN,
   })
-  role: userRole.USER;
+  role: userRole;
 
-  @ApiProperty({example: ''})
+  @ApiProperty({example: '1742753992335.webp'})
   avatar: string;
 
   @ApiProperty({ example: '1' })
