@@ -1,0 +1,202 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Regions {
+  id   Int    @id @default(autoincrement())
+  name String
+  User User[]
+}
+
+enum userRole {
+  ADMIN
+  SUPER_ADMIN
+  USER
+}
+
+enum userStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id               Int        @id @default(autoincrement())
+  fullName         String
+  year             Int
+  email            String     @unique
+  password         String
+  phone            String     @unique
+  role             userRole   @default(USER)
+  status           userStatus @default(INACTIVE)
+  avatar           String
+  regionId         Int
+  region           Regions    @relation(fields: [regionId], references: [id])
+  onlineAt         DateTime   @default(now())
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  Sessions         Sessions[]
+  Product          Product[]
+  Likes            Likes[]
+  Order            Order[]
+  messageSent      Chats[]    @relation(name: "MessageFromUser")
+  messagesReceived Chats[]    @relation(name: "MessageToUser")
+  Comments         Comments[]
+  Views            Views[]
+}
+
+model Sessions {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  ip         String
+  devaceInfo String
+  location   String
+  createdAt  DateTime @default(now())
+}
+
+enum categoryType {
+  Accessories
+  Laptops
+  Phone
+  Electronics
+}
+
+model Categories {
+  id      Int          @id @default(autoincrement())
+  name    String
+  type    categoryType
+  Product Product[]
+}
+
+model Color {
+  id           Int            @id @default(autoincrement())
+  name         String
+  ProductColor ProductColor[]
+}
+
+enum ProductStatus {
+  NEW
+  OLD
+}
+
+enum ProductCondition {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ProductCurrency {
+  UZS
+  USD
+}
+
+enum ProductTradeType {
+  SALE
+  RENT
+}
+
+model Product {
+  id           Int              @id @default(autoincrement())
+  name         String
+  description  String
+  price        Decimal
+  categoryId   Int
+  category     Categories       @relation(fields: [categoryId], references: [id])
+  status       ProductStatus
+  quantity     Int
+  userId       Int
+  user         User             @relation(fields: [userId], references: [id])
+  image        String
+  condition    ProductCondition
+  currency     ProductCurrency
+  discount     Decimal
+  tradeType    ProductTradeType
+  isAvailable  Boolean
+  location     String
+  ProductColor ProductColor[]
+  Likes        Likes[]
+  Order        Order[]
+  Chats        Chats[]
+  Comments     Comments[]
+  Views        Views[]
+}
+
+model ProductColor {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  colorId   Int
+  color     Color   @relation(fields: [colorId], references: [id])
+}
+
+model Likes {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+  quantity   Int
+  totalPrice Decimal
+  createdAt  DateTime @default(now())
+}
+
+model Chats {
+  id         Int      @id @default(autoincrement())
+  fromUserId Int
+  fromUser   User     @relation(name: "MessageFromUser", fields: [fromUserId], references: [id])
+  toUserId   Int
+  toUser     User     @relation(name: "MessageToUser", fields: [toUserId], references: [id])
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+  message    String
+  createdAt  DateTime @default(now())
+}
+
+model Comments {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  star      Decimal
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Views {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model siteMetaData {
+  id            Int      @id @default(autoincrement())
+  about         String
+  privacyPolicy String
+  email         String
+  phone         String
+  socialMedia   String[]
+}

@@ -1,8 +1,8 @@
 {
-  "name": "21-dars, uyga-vazifa, Olx shop with NestJs",
+  "name": "uyga-vazifa",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Abdulboriy Mahamatjanov",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -21,8 +21,21 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.1",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/serve-static": "^5.0.3",
+    "@nestjs/swagger": "^11.0.7",
+    "@prisma/client": "^6.5.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/multer": "^1.4.12",
+    "@types/nodemailer": "^6.4.17",
+    "and": "^0.0.3",
+    "bcrypt": "^5.1.1",
+    "multer": "^1.4.5-lts.2",
+    "nodemailer": "^6.10.0",
+    "prisma": "^6.5.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
