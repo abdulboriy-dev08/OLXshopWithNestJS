@@ -33,6 +33,18 @@ export class UserService {
       let user = await this.findUser(registerDto.email);
       if (user) throw new BadRequestException('This account already exists ❗');
 
+      let checkPhone = await this.Prisma.user.findUnique({
+        where: { phone: registerDto.phone },
+      });
+
+      if (checkPhone) throw new BadRequestException( `This ${registerDto.phone} phoneNumber already registered ❗` );
+
+      let findRegion = await this.Prisma.regions.findFirst({
+        where: { id: registerDto.regionId },
+      });
+
+      if (!findRegion) throw new NotFoundException('Region not found ❗');
+
       let hashPass = bcrypt.hashSync(registerDto.password, 10);
       let data = { ...registerDto, password: hashPass };
 
